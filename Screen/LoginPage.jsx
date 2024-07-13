@@ -106,9 +106,17 @@ export default function LoginPage() {
           )}
 
           <View style={styles.titleContainer}>
+<<<<<<< HEAD
           <Text style={styles.login}>Let's {`\n`}Started</Text>
           </View>
 
+=======
+            <Image source={logo} style={styles.logo} />
+          </View>
+
+          <Text style={styles.login}>Login</Text>
+
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
           <View style={styles.fullContainer}>
             <View style={styles.inputBox}>
               <View style={styles.inputContainer}>
@@ -222,9 +230,14 @@ const styles = StyleSheet.create({
   fullContainer: {
     width: "100%",
     backgroundColor: "white",
+<<<<<<< HEAD
     paddingBottom: 100,
     paddingTop: 40,
     top: 20,
+=======
+    paddingBottom: 80,
+    paddingTop: 30,
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
@@ -235,6 +248,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     alignItems: "center",
+<<<<<<< HEAD
     width: "90%",
     marginBottom: scale(20),
   },
@@ -248,6 +262,20 @@ const styles = StyleSheet.create({
 
     fontFamily: "  ",
     textAlign: "s",
+=======
+    marginBottom: scale(20),
+  },
+  logo: {
+    width: 280,
+    height: 100,
+  },
+  login: {
+    fontSize: scale(30),
+    fontWeight: "bold",
+    marginBottom: scale(20),
+    color: "black",
+    textAlign: "center",
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
   },
   inputContainer: {
     width: "100%",

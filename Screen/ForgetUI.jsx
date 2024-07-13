@@ -3,7 +3,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
 import { Button } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+<<<<<<< HEAD
 import { useNavigation } from "@react-navigation/native";
+=======
+import { useNavigation } from '@react-navigation/native';
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
 
 import {
   StyleSheet,
@@ -24,11 +28,14 @@ const scale = (size) => (width / 375) * size;
 export default function ForgetUI() {
   const navigation = useNavigation();
 
+<<<<<<< HEAD
 
   const backHandler = () => {
     navigation.goBack();
   };
 
+=======
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
   const [email, setEmail] = useState();
 
   function loginHandler() {
@@ -50,6 +57,7 @@ export default function ForgetUI() {
           style={styles.container}
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
+<<<<<<< HEAD
           <View style={styles.arrowBack}>
             <TouchableOpacity>
               <Button
@@ -61,6 +69,8 @@ export default function ForgetUI() {
               ></Button>
             </TouchableOpacity>
           </View>
+=======
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
           <ScrollView
             contentContainerStyle={styles.scrollView}
             keyboardShouldPersistTaps="handled"
@@ -93,13 +103,23 @@ export default function ForgetUI() {
                     Send Forgot Email
                   </Button>
                 </TouchableOpacity>
+<<<<<<< HEAD
                 <View>
+=======
+                <View >
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
                   <Text style={styles.Ortext}>OR</Text>
                 </View>
                 <View>
                   <TouchableOpacity onPress={loginHandler}>
                     <Button
+<<<<<<< HEAD
                       icon={() => <Icon name="login" size={24} color="white" />}
+=======
+                      icon={() => (
+                        <Icon name="login" size={24} color="white" />
+                      )}
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
                       mode="contained"
                       onPress={goToLogin}
                     >
@@ -159,7 +179,11 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     flexGrow: 1,
+<<<<<<< HEAD
     justifyContent: " start",
+=======
+    justifyContent: "center",
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
     // alignItems: "center",
   },
   content: {
@@ -202,6 +226,7 @@ const styles = StyleSheet.create({
     padding: scale(10),
     marginBottom: scale(20),
   },
+<<<<<<< HEAD
   arrowBack: {
     position: "absolute",
     top: 0,
@@ -210,4 +235,6 @@ const styles = StyleSheet.create({
     paddingRight: 10,
   },
   
+=======
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
 });

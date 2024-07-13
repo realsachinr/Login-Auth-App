@@ -27,7 +27,11 @@ export default function TermsAndServices() {
         contentContainerStyle={styles.contentContainer}
       >
         <View style={styles.arrowBack}>
+<<<<<<< HEAD
           <TouchableOpacity >
+=======
+          <TouchableOpacity onPress={backHandler}>
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
             <Button
               icon={() => <Icon name="arrow-back" size={40} color="white" />} // Example icon with specific size and color
               //   mode="contained"
@@ -37,9 +41,12 @@ export default function TermsAndServices() {
             ></Button>
           </TouchableOpacity>
         </View>
+<<<<<<< HEAD
         <View >
           <Text style={styles.title}>Privacy And Services</Text>
         </View>
+=======
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
 
         <View style={styles.content}>
           <Text style={styles.heading}>Who we are</Text>
@@ -219,12 +226,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
   },
+<<<<<<< HEAD
   title: {
     fontSize: 20,
     color: "white",
     fontWeight: "bold",
    
   },
+=======
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
   backButton: {
     width: 40, // Adjust the width and height as needed for the arrow button
     height: 40,
@@ -261,7 +271,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   content: {
+<<<<<<< HEAD
     marginTop: 35,
+=======
+    marginTop: 80,
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
     // backgroundColor: "#6C1A39",
     backgroundColor: "#fff",
     borderRadius: 20,

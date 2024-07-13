@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import HomePage from "./HomePage";
+<<<<<<< HEAD
 import { Button } from "react-native-paper";
 
 import Icon from "react-native-vector-icons/MaterialIcons"; //
 import { useNavigation } from "@react-navigation/native";
+=======
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
 import { IconButton } from "react-native-paper";
 import { StatusBar } from "expo-status-bar";
 import {
@@ -32,18 +35,26 @@ const hideScrollbar =
 const { width } = Dimensions.get("window");
 const scale = (size) => (width / 375) * size;
 
+<<<<<<< HEAD
 export default function SignupPage() {
+=======
+export default function SignupPage({ navigation }) {
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
   const [currentPage, setCurrentPage] = useState("Login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullname, setFullname] = useState("");
   const [loading, setLoading] = useState(false); // State to control loading indicator
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+<<<<<<< HEAD
   const navigation = useNavigation();
 
   const backHandler = () => {
     navigation.goBack();
   };
+=======
+
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
@@ -66,6 +77,7 @@ export default function SignupPage() {
     navigation.navigate("TermsAndService");
   }
   function refundPolicy() {
+<<<<<<< HEAD
     navigation.navigate("Refundpolicy");
   }
   function privacyPolicy() {
@@ -73,6 +85,15 @@ export default function SignupPage() {
   }
   function cookiePolicy() {
     navigation.navigate("Cookiepolicy");
+=======
+    navigation.navigate("Refundpolicy")
+  }
+  function privacyPolicy() {
+    navigation.navigate("Privacypolicy")
+  }
+  function cookiePolicy() {
+    navigation.navigate("Cookiepolicy")
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
   }
 
   function loginHandler() {
@@ -99,6 +120,7 @@ export default function SignupPage() {
             end={{ x: 1, y: 0 }}
             style={styles.background}
           >
+<<<<<<< HEAD
             <View style={styles.arrowBack}>
               <TouchableOpacity onPress={backHandler}>
                 <Button
@@ -113,6 +135,8 @@ export default function SignupPage() {
                 </Button>
               </TouchableOpacity>
             </View>
+=======
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
             <SafeAreaView style={styles.safeArea}>
               <KeyboardAvoidingView
                 style={styles.container}
@@ -206,6 +230,7 @@ export default function SignupPage() {
                         >
                           Terms of Service,
                         </Text>
+<<<<<<< HEAD
                         <Text
                           onPress={cookiePolicy}
                           style={styles.termsandcndtn}
@@ -226,6 +251,13 @@ export default function SignupPage() {
                           {" "}
                           Refund Policy{" "}
                         </Text>
+=======
+                        <Text onPress={cookiePolicy} style={styles.termsandcndtn}> Cookie Policy, </Text>
+                        <Text onPress={privacyPolicy} style={styles.termsandcndtn}>
+                           Privacy Policy,
+                        </Text>
+                        <Text onPress={refundPolicy} style={styles.termsandcndtn}> Refund Policy </Text>
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
                         and Content Policies.
                       </Text>
                     </View>
@@ -253,6 +285,7 @@ const styles = StyleSheet.create({
   termsandcndtn: {
     color: "#A01B3A",
   },
+<<<<<<< HEAD
   arrowBack: {
     width: "100%",
     left: -130,
@@ -261,6 +294,8 @@ const styles = StyleSheet.create({
 
     
   },
+=======
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
   background: {
     flex: 1,
     width: "100%",
@@ -279,10 +314,16 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     left: -75,
+<<<<<<< HEAD
     top: 10,
 
     maxWidth: "50%",
     marginBottom: scale(80),
+=======
+    marginTop: 80,
+    maxWidth: "50%",
+    marginBottom: scale(100),
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
   },
   inputBoxBg: {
     backgroundColor: "white",
@@ -293,7 +334,10 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingBottom: 110,
     paddingTop: 50,
+<<<<<<< HEAD
     top: 20,
+=======
+>>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
   },
   icon: {
     margin: 0,
