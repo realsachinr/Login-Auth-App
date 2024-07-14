@@ -2,10 +2,10 @@ import React from "react";
 import { Button } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, ScrollView } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Icon from "react-native-vector-icons/MaterialIcons"; //
+import Icon from "react-native-vector-icons/MaterialIcons";
+
 export default function TermsAndServices() {
   const navigation = useNavigation();
 
@@ -26,27 +26,18 @@ export default function TermsAndServices() {
         showsVerticalScrollIndicator={false} // hide the vertical scroll indicator
         contentContainerStyle={styles.contentContainer}
       >
-        <View style={styles.arrowBack}>
-<<<<<<< HEAD
-          <TouchableOpacity >
-=======
-          <TouchableOpacity onPress={backHandler}>
->>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
-            <Button
-              icon={() => <Icon name="arrow-back" size={40} color="white" />} // Example icon with specific size and color
-              //   mode="contained"
-              onPress={backHandler}
-              style={styles.button}
-              labelStyle={styles.label}
-            ></Button>
-          </TouchableOpacity>
-        </View>
-<<<<<<< HEAD
-        <View >
+        <TouchableOpacity style={styles.arrowBack} onPress={backHandler}>
+          <Button
+            icon={() => <Icon name="arrow-back" size={40} color="white" />} // Example icon with specific size and color
+            onPress={backHandler}
+            style={styles.button}
+            labelStyle={styles.label}
+          ></Button>
+        </TouchableOpacity>
+
+        <View>
           <Text style={styles.title}>Privacy And Services</Text>
         </View>
-=======
->>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
 
         <View style={styles.content}>
           <Text style={styles.heading}>Who we are</Text>
@@ -109,111 +100,6 @@ export default function TermsAndServices() {
             employees, directors, officers, agents and their successors and
             assigns.
           </Text>
-          <Text style={styles.paragraph}>
-            d)For the purpose of this Privacy Policy (“Policy”), wherever the
-            context so requires. The term ‘You’ &‘User’ shall mean any legal
-            person or entity accessing or using the services provided on this
-            Website, who is competent to enter into binding contracts, as per
-            the provisions of the Indian Contract Act, 1872; 
-            {`\n`}
-            {`\n`}
-            The terms ‘We’,
-            ‘Us’& ‘Our’ shall mean the Website and/or the Company, as the
-            context so requires. 
-            
-            {`\n`}{`\n`}
-            The terms ‘Party’ & ‘Parties’ shall
-            respectively be used to refer to the User and the Company
-            individually and collectively, as the context so requires.
-          </Text>
-          <Text style={styles.paragraph}>
-            c)The domain name www.myitronline.com ("Website"), is owned and
-            operated by Myitronline Global Services Private limited. Company by
-            shares, incorporated under the provisions of the Companies Act,
-            2013, and having its registered office: at 301, 3rd Floor Plot No.
-            51, Hasanpur, IP Extension, Patparganj, Delhi - 110092 where such
-            expression shall, unless repugnant to the context thereof, be deemed
-            to include its respective representatives, administrators,
-            employees, directors, officers, agents and their successors and
-            assigns.
-          </Text>
-          <Text style={styles.paragraph}>
-            c)The domain name www.myitronline.com ("Website"), is owned and
-            operated by Myitronline Global Services Private limited. Company by
-            shares, incorporated under the provisions of the Companies Act,
-            2013, and having its registered office: at 301, 3rd Floor Plot No.
-            51, Hasanpur, IP Extension, Patparganj, Delhi - 110092 where such
-            expression shall, unless repugnant to the context thereof, be deemed
-            to include its respective representatives, administrators,
-            employees, directors, officers, agents and their successors and
-            assigns.
-          </Text>
-          <Text style={styles.paragraph}>
-            c)The domain name www.myitronline.com ("Website"), is owned and
-            operated by Myitronline Global Services Private limited. Company by
-            shares, incorporated under the provisions of the Companies Act,
-            2013, and having its registered office: at 301, 3rd Floor Plot No.
-            51, Hasanpur, IP Extension, Patparganj, Delhi - 110092 where such
-            expression shall, unless repugnant to the context thereof, be deemed
-            to include its respective representatives, administrators,
-            employees, directors, officers, agents and their successors and
-            assigns.
-          </Text>
-          <Text style={styles.paragraph}>
-            c)The domain name www.myitronline.com ("Website"), is owned and
-            operated by Myitronline Global Services Private limited. Company by
-            shares, incorporated under the provisions of the Companies Act,
-            2013, and having its registered office: at 301, 3rd Floor Plot No.
-            51, Hasanpur, IP Extension, Patparganj, Delhi - 110092 where such
-            expression shall, unless repugnant to the context thereof, be deemed
-            to include its respective representatives, administrators,
-            employees, directors, officers, agents and their successors and
-            assigns.
-          </Text>
-          <Text style={styles.paragraph}>
-            c)The domain name www.myitronline.com ("Website"), is owned and
-            operated by Myitronline Global Services Private limited. Company by
-            shares, incorporated under the provisions of the Companies Act,
-            2013, and having its registered office: at 301, 3rd Floor Plot No.
-            51, Hasanpur, IP Extension, Patparganj, Delhi - 110092 where such
-            expression shall, unless repugnant to the context thereof, be deemed
-            to include its respective representatives, administrators,
-            employees, directors, officers, agents and their successors and
-            assigns.
-          </Text>
-          <Text style={styles.paragraph}>
-            c)The domain name www.myitronline.com ("Website"), is owned and
-            operated by Myitronline Global Services Private limited. Company by
-            shares, incorporated under the provisions of the Companies Act,
-            2013, and having its registered office: at 301, 3rd Floor Plot No.
-            51, Hasanpur, IP Extension, Patparganj, Delhi - 110092 where such
-            expression shall, unless repugnant to the context thereof, be deemed
-            to include its respective representatives, administrators,
-            employees, directors, officers, agents and their successors and
-            assigns.
-          </Text>
-          <Text style={styles.paragraph}>
-            c)The domain name www.myitronline.com ("Website"), is owned and
-            operated by Myitronline Global Services Private limited. Company by
-            shares, incorporated under the provisions of the Companies Act,
-            2013, and having its registered office: at 301, 3rd Floor Plot No.
-            51, Hasanpur, IP Extension, Patparganj, Delhi - 110092 where such
-            expression shall, unless repugnant to the context thereof, be deemed
-            to include its respective representatives, administrators,
-            employees, directors, officers, agents and their successors and
-            assigns.
-          </Text>
-          <Text style={styles.paragraph}>
-            c)The domain name www.myitronline.com ("Website"), is owned and
-            operated by Myitronline Global Services Private limited. Company by
-            shares, incorporated under the provisions of the Companies Act,
-            2013, and having its registered office: at 301, 3rd Floor Plot No.
-            51, Hasanpur, IP Extension, Patparganj, Delhi - 110092 where such
-            expression shall, unless repugnant to the context thereof, be deemed
-            to include its respective representatives, administrators,
-            employees, directors, officers, agents and their successors and
-            assigns.
-          </Text>
         </View>
       </ScrollView>
     </LinearGradient>
@@ -226,90 +112,58 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
   },
-<<<<<<< HEAD
   title: {
     fontSize: 20,
     color: "white",
+    top:15,
     fontWeight: "bold",
-   
-  },
-=======
->>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
-  backButton: {
-    width: 40, // Adjust the width and height as needed for the arrow button
-    height: 40,
-    color: "white",
-    justifyContent: "center", // Center the icon vertically
-    alignItems: "center", // Center the icon horizontally
   },
   arrowBack: {
     position: "absolute",
     top: 0,
-    left: -20,
-    paddingLeft: 10,
-    paddingRight: 10,
+    left: 0,
+    padding: 10,
   },
   container: {
-    
     marginTop: 50,
     width: "90%",
   },
   contentContainer: {
     flexGrow: 1,
     alignItems: "center",
-
   },
   contentMore: {
-    // backgroundColor: "#6C1A39",
     backgroundColor: "#fff",
     borderRadius: 20,
-    paddingTop: 20,
-    paddingLeft: 20,
-    paddingRight: 20,
-
+    padding: 20,
     marginBottom: 20,
-    paddingHorizontal: 10,
   },
   content: {
-<<<<<<< HEAD
-    marginTop: 35,
-=======
     marginTop: 80,
->>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
-    // backgroundColor: "#6C1A39",
     backgroundColor: "#fff",
     borderRadius: 20,
-    paddingTop: 20,
-    paddingLeft: 20,
-    paddingRight: 20,
-
+    padding: 20,
     marginBottom: 20,
-    paddingHorizontal: 10, // Add horizontal padding to content
   },
   contentHeading: {
     fontSize: 20,
     backgroundColor: "#461738",
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
+    padding: 10,
     borderRadius: 20,
-    color: "white", // Ensure heading is visible against the gradient background
+    color: "white",
     fontWeight: "bold",
     marginBottom: 20,
-    color: "white", //
   },
   heading: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "black", // Change text color to black
+    color: "black",
     marginBottom: 10,
-    // color: "white", // Ensure heading is visible against the gradient background
   },
   paragraph: {
-  fontSize: 16,
-  marginBottom: 10,
-  textAlign: "justify",
-  color: "black", // Change text color to black
-},
+    fontSize: 16,
+    marginBottom: 10,
+    textAlign: "justify",
+    color: "black",
+  },
 });

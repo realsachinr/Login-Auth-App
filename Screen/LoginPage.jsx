@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import logo from "../assets/Logo.png";
-import { LinearGradient } from "expo-linear-gradient";
+
 import { IconButton } from "react-native-paper";
+
+import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
@@ -15,7 +17,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  ActivityIndicator, // Import ActivityIndicator for the loader
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -33,8 +34,8 @@ export default function LoginPage() {
   const [currentPage, setCurrentPage] = useState("Login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false); // State to control loading indicator
 
   const navigation = useNavigation();
 
@@ -42,51 +43,38 @@ export default function LoginPage() {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
   };
-
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleLogin = () => {
+  const handleLogin = (e) => {
+    e.preventDefault();
     if (email === "" || password === "") {
       alert("Please fill in all fields");
+      styles.input.borderColor = "red";
       return;
     }
     if (!validateEmail(email)) {
       alert("Invalid Email");
+      styles.input.borderColor = "red";
       return;
     }
-
-    setLoading(true); // Show loader
-
-    // Simulating a delay before navigating (replace with actual login logic)
-    setTimeout(() => {
-      setLoading(false); // Hide loader
-      navigation.navigate("MainAppStack");
-    }, 500); // Simulating 2 seconds delay
+    // Redirect to HomePage after login
+    navigation.navigate("MainAppStack");
   };
 
   function SignupHandler() {
-    setLoading(true); // Show loader
-
-    // Simulating a delay before navigating (replace with actual signup logic)
-    setTimeout(() => {
-      setLoading(false); // Hide loader
-      navigation.navigate("Signup");
-    }, 500); // Simulating 2 seconds delay
+    navigation.navigate("Signup");
   }
-
   function forgotHandler() {
-    setLoading(true); // Show loader
-
-    // Simulating a delay before navigating (replace with actual signup logic)
-    setTimeout(() => {
-      setLoading(false); // Hide loader
-      navigation.navigate("Forget");
-    }, 500); // Simulating 2 seconds delay
+    navigation.navigate("Forget");
   }
 
   return (
+    // <ImageBackground source={""} >
+
+    // </ImageBackground>
+
     <LinearGradient
       colors={["#A01B3A", "#2C1738"]}
       start={{ x: 0, y: 0 }}
@@ -98,26 +86,11 @@ export default function LoginPage() {
           contentContainerStyle={styles.scrollView}
           style={hideScrollbar}
         >
-          {/* Loader */}
-          {loading && (
-            <View style={styles.loaderContainer}>
-              <ActivityIndicator size="large" color="#fff" />
-            </View>
-          )}
-
           <View style={styles.titleContainer}>
-<<<<<<< HEAD
-          <Text style={styles.login}>Let's {`\n`}Started</Text>
+            <Text style={styles.login}>Let's {`\n`}Started</Text>
           </View>
 
-=======
-            <Image source={logo} style={styles.logo} />
-          </View>
-
-          <Text style={styles.login}>Login</Text>
-
->>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
-          <View style={styles.fullContainer}>
+          <View style={styles.Fullcontainer}>
             <View style={styles.inputBox}>
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>Email</Text>
@@ -157,11 +130,7 @@ export default function LoginPage() {
               </TouchableOpacity>
             </View>
 
-            <TouchableOpacity
-              onPress={handleLogin}
-              style={styles.buttonContainer}
-              disabled={loading} // Disable button when loading
-            >
+            <TouchableOpacity style={styles.button} onPress={handleLogin}>
               <LinearGradient
                 colors={["#A01B3A", "#2C1738"]}
                 start={{ x: 0, y: 0 }}
@@ -175,7 +144,7 @@ export default function LoginPage() {
             <Text style={styles.orText}>OR Continue With</Text>
 
             <View style={styles.socialContainer}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handleLogin}>
                 <Image
                   source={{
                     uri: "https://upload.wikimedia.org/wikipedia/commons/6/6c/Facebook_Logo_2023.png",
@@ -183,16 +152,14 @@ export default function LoginPage() {
                   style={styles.socialIcon}
                 />
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handleLogin}>
                 <Text style={styles.GooglebuttonText}>G+</Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.haveAccount}>
-              <Text style={styles.signupText}>Don't have an account?</Text>
-              <TouchableOpacity>
-                <Text onPress={SignupHandler} style={styles.signupbtn} >
-                  Sign up
-                </Text>
+            <View style={styles.signupTextContainer}>
+              <Text>Don't have an account?</Text>
+              <TouchableOpacity onPress={SignupHandler}>
+                <Text style={styles.signupText}> Sign up</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -201,6 +168,8 @@ export default function LoginPage() {
       <StatusBar style="auto" />
     </LinearGradient>
   );
+
+  return <View style={{ flex: 1 }}>{renderPage()}</View>;
 }
 
 const styles = StyleSheet.create({
@@ -208,83 +177,54 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
   },
-  signupBtn: {
-    marginTop: "top",
-  },
-  haveAccount: {
-    flexDirection: "row",
-    marginTop: 20,
-    gap: 5,
-    alignItems: "center",
+  Fullcontainer: {
+    // flex: 1,
+    width: "100%",
+    top: 30,
+    backgroundColor: "white",
+    paddingTop: 40,
+    borderRadius: 30,
+    top: 70,
+    paddingBottom: 90,
     justifyContent: "center",
+    alignItems: "center",
   },
   container: {
     flex: 1,
     width: "100%",
-  },
-  signupbtn: {
-    color: "#A01B3A",
-    fontWeight: "500",
-    
-  },  
-  fullContainer: {
-    width: "100%",
-    backgroundColor: "white",
-<<<<<<< HEAD
-    paddingBottom: 100,
-    paddingTop: 40,
-    top: 20,
-=======
-    paddingBottom: 80,
-    paddingTop: 30,
->>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center",
+    // justifyContent: "center",
+    // alignItems: "center",
+    // paddingHorizontal: 10,
   },
   scrollView: {
     flexGrow: 1,
-    marginTop: 80,
+    justifyContent: "center",
+    alignItems: "center",
   },
   titleContainer: {
-    alignItems: "center",
-<<<<<<< HEAD
-    width: "90%",
+    // alignItems: "center",
+    justifyContent: "flex-start",
+    // alignItems:"flex-start",
     marginBottom: scale(20),
   },
-
   login: {
     fontSize: scale(40),
     fontWeight: "bold",
-    width: "90%",
     marginBottom: scale(20),
     color: "white",
-
-    fontFamily: "  ",
-    textAlign: "s",
-=======
-    marginBottom: scale(20),
-  },
-  logo: {
-    width: 280,
-    height: 100,
-  },
-  login: {
-    fontSize: scale(30),
-    fontWeight: "bold",
-    marginBottom: scale(20),
-    color: "black",
-    textAlign: "center",
->>>>>>> 2577d0468bf10600c00844bf3b2de6fe442a2cf4
+    top: 50,
+    left: -90,
   },
   inputContainer: {
     width: "100%",
+    // alignItems: "center",
     marginBottom: 20,
+    // flex: 1,
   },
   label: {
     fontSize: scale(16),
     fontWeight: "600",
-    color: "#9F1B3A",
+    color: "#A01B3A",
     justifyContent: "flex-start",
     left: 17,
     marginBottom: 5,
@@ -296,13 +236,15 @@ const styles = StyleSheet.create({
   input: {
     width: "100%",
     padding: 10,
-    borderColor: "#641939",
     borderWidth: 1,
+    borderColor: "#518",
     borderRadius: 25,
     paddingLeft: 20,
+    backgroundColor: "white",
   },
   forgotPasswordContainer: {
     alignSelf: "flex-end",
+    marginTop: 10,
   },
   icon: {
     position: "absolute",
@@ -313,18 +255,29 @@ const styles = StyleSheet.create({
     color: "blue",
   },
   button: {
-    width: "90%",
+    width: "80%",
+    // padding: 15,
+    // backgroundColor: "#007BFF",
+    borderRadius: 25,
+    alignItems: "center",
+    // marginTop: 20,
+  },
+  signupButton: {
+    width: "50%",
     padding: 15,
     backgroundColor: "#007BFF",
     borderRadius: 25,
     alignItems: "center",
+    justifyContent: "center",
     marginTop: 20,
+    marginBottom: 10,
   },
   buttonText: {
-    color: "#fff",
-    fontSize: 22,
-    paddingLeft: 50,
-    paddingRight: 50,
+    color: "white",
+    paddingBottom: 10,
+    paddingTop: 10,
+    fontSize: scale(20),
+    fontWeight: "600",
   },
   GooglebuttonText: {
     fontSize: scale(16),
@@ -340,9 +293,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   signupText: {
-    // marginTop: 20,
-    // color: "blue",
-    // textAlign: "center",
+   
+    color: "blue",
+    textAlign: "center",
+  },
+  signupTextContainer: {
+    flexDirection: "row",
+    top:10,
   },
   socialContainer: {
     flexDirection: "row",
@@ -354,11 +311,5 @@ const styles = StyleSheet.create({
     height: scale(40),
     marginHorizontal: 10,
   },
-  loaderContainer: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 1,
-  },
 });
+``;
