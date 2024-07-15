@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import logo from "../assets/Logo.png";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IconButton } from "react-native-paper";
-
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
+import { useEffect } from "react";
 import {
   StyleSheet,
   Text,
   View,
   Dimensions,
-  ImageBackground,
   TextInput,
   Image,
   TouchableOpacity,
@@ -34,33 +32,82 @@ export default function LoginPage() {
   const [currentPage, setCurrentPage] = useState("Login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [password, setPassword] = useState('');
+  const [fillError, setFillError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(false);
+  const [PswrdErrorMsg, setPswrdErrorMsg] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
+  console.log(errorMsg);
   const navigation = useNavigation();
 
   const validateEmail = (email) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const regex = "/^[^s@]+@[^s@]+.[^s@]+$/";
     return regex.test(email);
   };
+
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    if (email === "" || password === "") {
-      alert("Please fill in all fields");
-      styles.input.borderColor = "red";
-      return;
+  useEffect(() => {
+    const checkLoggedInUser = async () => {
+      try {
+        const userString = await AsyncStorage.getItem("user");
+        const userData = JSON.parse(userString);
+
+        if (userData && userData.email && userData.password) {
+          navigation.navigate("MainAppStack");
+        }
+      } catch (error) {
+        console.error("Error retrieving data from AsyncStorage:", error);
+        alert("Error retrieving data. Please try again.");
+      }
+    };
+
+    checkLoggedInUser();
+  }, []);
+
+  const handleLogin = async () => {
+    try {
+      if (email === "" || password === "") {
+        setFillError(true);
+        return;
+      }
+      // Retrieve user data from AsyncStorage
+      const userString = await AsyncStorage.getItem("user");
+
+      // Parse the user data from string to object
+      const userData = JSON.parse(userString);
+
+      // Check if userData exists and has email/password properties
+      if (!userData.email || !userData.password) {
+        alert("User data not found. Please sign up.");
+        return;
+      }
+
+      // Check if email and password match
+      if (email !== userData.email) {
+        setErrorMsg(true);
+        // alert("user not found");
+        return;
+      } else {
+        setErrorMsg(false);
+      }
+      if (password !== userData.password) {
+        setPswrdErrorMsg(true);
+        // alert("Wrong paswrd");
+        return;
+      }
+
+      // Redirect to HomePage after login
+      navigation.navigate("MainAppStack");
+      setEmail("");
+      setPassword("");
+      setFillError(false);
+      setErrorMsg(false);
+    } catch (error) {
+      console.error("Error retrieving data from AsyncStorage:", error);
+      alert("Error retrieving data. Please try again.");
     }
-    if (!validateEmail(email)) {
-      alert("Invalid Email");
-      styles.input.borderColor = "red";
-      return;
-    }
-    // Redirect to HomePage after login
-    navigation.navigate("MainAppStack");
   };
 
   function SignupHandler() {
@@ -101,6 +148,12 @@ export default function LoginPage() {
                   onChangeText={setEmail}
                   keyboardType="email-address"
                 />
+                {errorMsg && (
+                  <Text style={styles.errorText}>User Not Found</Text>
+                )}
+                {fillError && (
+                  <Text style={styles.errorText}>Please fill email</Text>
+                )}
               </View>
 
               <View style={styles.inputContainer}>
@@ -120,6 +173,12 @@ export default function LoginPage() {
                     size={24}
                     onPress={toggleShowPassword}
                   />
+                  {PswrdErrorMsg && (
+                    <Text style={styles.errorText}>Please Check Password</Text>
+                  )}
+                  {fillError && (
+                    <Text style={styles.errorText}>Please fill password</Text>
+                  )}
                 </View>
               </View>
               <TouchableOpacity
@@ -188,6 +247,10 @@ const styles = StyleSheet.create({
     paddingBottom: 90,
     justifyContent: "center",
     alignItems: "center",
+  },
+  errorText: {
+    color: "#A01B3A",
+    left: 16,
   },
   container: {
     flex: 1,
@@ -293,13 +356,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   signupText: {
-   
     color: "blue",
     textAlign: "center",
   },
   signupTextContainer: {
     flexDirection: "row",
-    top:10,
+    top: 10,
   },
   socialContainer: {
     flexDirection: "row",

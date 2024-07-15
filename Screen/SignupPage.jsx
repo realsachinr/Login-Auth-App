@@ -8,6 +8,8 @@ import Icon from "react-native-vector-icons/MaterialIcons"; //
 import { useNavigation } from "@react-navigation/native";
 import { IconButton } from "react-native-paper";
 import { StatusBar } from "expo-status-bar";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import {
   StyleSheet,
   Text,
@@ -18,6 +20,7 @@ import {
   Image,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Alert,
   Platform,
   ScrollView,
   SafeAreaView,
@@ -40,7 +43,7 @@ export default function SignupPage() {
   const [fullname, setFullname] = useState("");
   const [loading, setLoading] = useState(false); // State to control loading indicator
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
+  const [userRegistered, setUserRegistered] =useState(false)
   const navigation = useNavigation();
 
   const backHandler = () => {
@@ -50,21 +53,55 @@ export default function SignupPage() {
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
-
-  function signupHandler() {
+  const signupHandler = async () => {
     if (email === "" || password === "" || fullname === "") {
-      styles.inputBoxBg.color = "green";
-      alert("Please fill in all fields");
+      Alert.alert("Error", "Please fill in all fields");
       return;
     }
+  
     setLoading(true); // Show loader
-
-    // Simulating a delay before navigating (replace with actual login logic)
-    setTimeout(() => {
-      setLoading(false); // Hide loader
+  
+    try {
+      // Check if user already exists
+      const existingUser = await AsyncStorage.getItem("user");
+      if (existingUser) {
+        const existingUserData = JSON.parse(existingUser);
+        if (existingUserData.email === email) {
+          setUserRegistered(true)
+          Alert.alert("Error", "User already registered with this email");
+          return;
+        }
+      }
+  
+      // Create user object
+      const user = {
+        fullname: fullname,
+        password: password,
+        email: email,
+      };
+  
+      // Save user data to local storage (AsyncStorage)
+      await AsyncStorage.setItem("user", JSON.stringify(user));
+  
+      // Show success message
+      Alert.alert("Success", "User registered successfully");
+  
+      // Reset fields after successful signup
+      setEmail("");
+      setPassword("");
+      setFullname("");
+  
+      // Navigate to the main app stack after signup
       navigation.navigate("MainAppStack");
-    }, 500); // Simulating 2 seconds delay
-  }
+    } catch (error) {
+      console.error("Error saving user data", error);
+      Alert.alert("Error", "Failed to register user");
+    } finally {
+      setLoading(false); // Hide loader
+    }
+  };
+  
+  
   function termsHandler() {
     navigation.navigate("TermsAndService");
   }
@@ -159,6 +196,9 @@ export default function SignupPage() {
                           onChangeText={setEmail}
                           keyboardType="email-address"
                         />
+                        {userRegistered && (<Text style={styles.errorText}>User already registered</Text>) 
+                          
+                        }
                       </View>
 
                       <View style={styles.inputContainer}>
@@ -255,7 +295,10 @@ const styles = StyleSheet.create({
   termsandcndtn: {
     color: "#A01B3A",
   },
-
+  errorText: {
+    color: "#A01B3A",
+    left: 16,
+  },
   arrowBack: {
     width: "100%",
     left: -130,
@@ -283,9 +326,7 @@ const styles = StyleSheet.create({
     top: 10,
     maxWidth: "50%",
     marginBottom: scale(55),
-    // marginTop: 80,
     maxWidth: "50%",
-    // marginBottom: scale(100),
   },
   inputBoxBg: {
     backgroundColor: "white",
@@ -404,12 +445,8 @@ const styles = StyleSheet.create({
   },
   pswrdinputWrapper: {
     flexDirection: "row",
-
     alignItems: "center",
     width: "100%",
-
-    // borderWidth: 1,
-    // borderColor: "#518",
     borderRadius: 25,
     paddingLeft: 10,
     backgroundColor: "white",
