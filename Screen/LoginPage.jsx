@@ -9,6 +9,7 @@ import {
   Text,
   View,
   Dimensions,
+  ToastAndroid,
   TextInput,
   Image,
   TouchableOpacity,
@@ -69,47 +70,69 @@ export default function LoginPage() {
   const handleLogin = async () => {
     try {
       if (email === "" || password === "") {
-        setFillError(true);
-        return;
-      }
-      // Retrieve user data from AsyncStorage
-      const userString = await AsyncStorage.getItem("user");
-
-      // Parse the user data from string to object
-      const userData = JSON.parse(userString);
-
-      // Check if userData exists and has email/password properties
-      if (!userData.email || !userData.password) {
-        alert("User data not found. Please sign up.");
+        // setFillError(true);
+        ToastAndroid.show("Please fill in all fields", ToastAndroid.SHORT);
         return;
       }
 
-      // Check if email and password match
-      if (email !== userData.email) {
+      // Retrieve users array from AsyncStorage
+      const usersString = await AsyncStorage.getItem("users");
+
+      // Check if usersString is null
+      if (!usersString) {
         setErrorMsg(true);
-        // alert("user not found");
+        return;
+      }
+
+      // Parse the users array from string to object
+      const usersArray = JSON.parse(usersString);
+
+      // Find the user with the matching email
+      const user = usersArray.find((user) => user.email === email);
+
+      // Check if user exists
+      if (!user) {
+        setErrorMsg(true);
         return;
       } else {
         setErrorMsg(false);
       }
-      if (password !== userData.password) {
+
+      // Check if password matches
+      if (password !== user.password) {
         setPswrdErrorMsg(true);
-        // alert("Wrong paswrd");
         return;
+      } else {
+        setPswrdErrorMsg(false);
       }
 
       // Redirect to HomePage after login
       navigation.navigate("MainAppStack");
+      ToastAndroid.show("Login Successfully", ToastAndroid.SHORT);
       setEmail("");
       setPassword("");
       setFillError(false);
       setErrorMsg(false);
+      setPswrdErrorMsg(false);
     } catch (error) {
       console.error("Error retrieving data from AsyncStorage:", error);
       alert("Error retrieving data. Please try again.");
     }
   };
 
+  const handleChangeInput = (text) => {
+    setEmail(text);
+    if (text.length > 0) {
+      setFillError(false); // Hide error when input is not empty
+      setErrorMsg(false)
+    }else {
+      setFillError(true); // Show error if input is empty
+      setErrorMsg(true)
+    } if (text.length === "") {
+      setFillError(false); // Show error if input is empty
+      setErrorMsg(false)
+    }
+  };
   function SignupHandler() {
     navigation.navigate("Signup");
   }
@@ -145,15 +168,15 @@ export default function LoginPage() {
                   style={styles.input}
                   placeholder="Enter your email"
                   value={email}
-                  onChangeText={setEmail}
+                  onChangeText={handleChangeInput}
                   keyboardType="email-address"
                 />
                 {errorMsg && (
                   <Text style={styles.errorText}>User Not Found</Text>
                 )}
-                {fillError && (
+                {/* {fillError && (
                   <Text style={styles.errorText}>Please fill email</Text>
-                )}
+                )} */}
               </View>
 
               <View style={styles.inputContainer}>
@@ -176,9 +199,9 @@ export default function LoginPage() {
                   {PswrdErrorMsg && (
                     <Text style={styles.errorText}>Please Check Password</Text>
                   )}
-                  {fillError && (
+                  {/* {fillError && (
                     <Text style={styles.errorText}>Please fill password</Text>
-                  )}
+                  )} */}
                 </View>
               </View>
               <TouchableOpacity

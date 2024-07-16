@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import HomePage from "./HomePage";
-
+import { ToastAndroid } from "react-native";
 import { Button } from "react-native-paper";
 
 import Icon from "react-native-vector-icons/MaterialIcons"; //
 import { useNavigation } from "@react-navigation/native";
 import { IconButton } from "react-native-paper";
 import { StatusBar } from "expo-status-bar";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import {
   StyleSheet,
@@ -22,6 +22,7 @@ import {
   KeyboardAvoidingView,
   Alert,
   Platform,
+  // ToastAndroid,
   ScrollView,
   SafeAreaView,
 } from "react-native";
@@ -43,7 +44,7 @@ export default function SignupPage() {
   const [fullname, setFullname] = useState("");
   const [loading, setLoading] = useState(false); // State to control loading indicator
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [userRegistered, setUserRegistered] =useState(false)
+  const [userRegistered, setUserRegistered] = useState(false);
   const navigation = useNavigation();
 
   const backHandler = () => {
@@ -55,42 +56,49 @@ export default function SignupPage() {
   };
   const signupHandler = async () => {
     if (email === "" || password === "" || fullname === "") {
-      Alert.alert("Error", "Please fill in all fields");
+      // Alert.alert("Error", "Please fill in all fields");.
+      ToastAndroid.show("Please fill in all fields", ToastAndroid.SHORT);
+      
       return;
     }
-  
+
     setLoading(true); // Show loader
-  
+
     try {
-      // Check if user already exists
-      const existingUser = await AsyncStorage.getItem("user");
-      if (existingUser) {
-        const existingUserData = JSON.parse(existingUser);
-        if (existingUserData.email === email) {
-          setUserRegistered(true)
-          Alert.alert("Error", "User already registered with this email");
-          return;
-        }
+      // Retrieve existing users array from AsyncStorage
+      const users = await AsyncStorage.getItem("users");
+      const usersArray = users ? JSON.parse(users) : [];
+
+      // Check if email is already registered
+      const userExists = usersArray.some(user => user.email === email);
+      if (userExists) {
+        ToastAndroid.show('User already registered with this email', ToastAndroid.SHORT);
+        setLoading(false);
+        return;
       }
-  
+
       // Create user object
-      const user = {
-        fullname: fullname,
-        password: password,
-        email: email,
+      const newUser = {
+        fullname,
+        password,
+        email,
       };
-  
-      // Save user data to local storage (AsyncStorage)
-      await AsyncStorage.setItem("user", JSON.stringify(user));
-  
+
+      // Add new user to users array
+      usersArray.push(newUser);
+
+      // Save updated users array to AsyncStorage
+      await AsyncStorage.setItem("users", JSON.stringify(usersArray));
+
       // Show success message
-      Alert.alert("Success", "User registered successfully");
-  
+
+      ToastAndroid.show('User registered successfully', ToastAndroid.SHORT);
+
       // Reset fields after successful signup
-      setEmail("");
-      setPassword("");
-      setFullname("");
-  
+      setFullname('');
+      setEmail('');
+      setPassword('');
+
       // Navigate to the main app stack after signup
       navigation.navigate("MainAppStack");
     } catch (error) {
@@ -100,8 +108,7 @@ export default function SignupPage() {
       setLoading(false); // Hide loader
     }
   };
-  
-  
+
   function termsHandler() {
     navigation.navigate("TermsAndService");
   }
@@ -114,7 +121,6 @@ export default function SignupPage() {
   function refundPolicy() {
     navigation.navigate("Refundpolicy");
   }
- 
 
   function loginHandler() {
     setLoading(true); // Show loader
@@ -196,9 +202,11 @@ export default function SignupPage() {
                           onChangeText={setEmail}
                           keyboardType="email-address"
                         />
-                        {userRegistered && (<Text style={styles.errorText}>User already registered</Text>) 
-                          
-                        }
+                        {userRegistered && (
+                          <Text style={styles.errorText}>
+                            User already registered
+                          </Text>
+                        )}
                       </View>
 
                       <View style={styles.inputContainer}>
@@ -466,7 +474,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     margin: 0,
-    top:7,
+    top: 7,
     padding: 0,
   },
   loaderContainer: {
