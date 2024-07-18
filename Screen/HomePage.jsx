@@ -16,7 +16,7 @@ const HomePage = () => {
         onPress={() => navigation.navigate("Forget")}
       />
 
-      
+<Toast /> 
     </View>
   );
 };

@@ -8,8 +8,9 @@ import Icon from "react-native-vector-icons/MaterialIcons"; //
 import { useNavigation } from "@react-navigation/native";
 import { IconButton } from "react-native-paper";
 import { StatusBar } from "expo-status-bar";
+import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+// import Toast from "react-native-toast-message";
 import {
   StyleSheet,
   Text,
@@ -43,8 +44,15 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [fullname, setFullname] = useState("");
   const [loading, setLoading] = useState(false); // State to control loading indicator
+  const [invalidDomain, setInvalidDomain] = useState(false);
+  const [requireValidation, setRequireValidation] = useState(false);
+  const [passwordCharacter, setPasswordCharacter] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [userRegistered, setUserRegistered] = useState(false);
+  const [fullNameRequired, setFullNameRequired] = useState(false);
+  const [emailRequired, setEmailRequired] = useState(false);
+  const [passwordRequire, setPasswordRequired] = useState(false);
+  const [passwordLength, setPasswordLength] = useState(false);
   const navigation = useNavigation();
 
   const backHandler = () => {
@@ -54,11 +62,60 @@ export default function SignupPage() {
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
+
+  const acceptedDomains = [
+    "gmail.com",
+    "yahoo.com",
+    "myitronline.com",
+    "hotmail.com",
+  ];
+
+  const isValidEmailDomain = (email) => {
+    const domain = email.split("@")[1];
+    return acceptedDomains.includes(domain);
+  };
+
+  const hasSpecialCharacter = (password) => {
+    const regex = /[!@#$%^&*(),.?":{}|<>]/;
+    return regex.test(password);
+  };
+
   const signupHandler = async () => {
-    if (email === "" || password === "" || fullname === "") {
-      // Alert.alert("Error", "Please fill in all fields");.
-      ToastAndroid.show("Please fill in all fields", ToastAndroid.SHORT);
-      
+    if (email === "" || password === "" || fullname === "" ) {
+      if (fullname === "") {
+        setFullNameRequired(true);
+      }
+      if (email === "") {
+        setEmailRequired(true);
+      }
+      if (password === "") {
+        setPasswordRequired(true);
+        setPasswordCharacter(false);
+      }
+      Toast.show({
+        type: "error",
+        text1: "Please fill in all fields",
+        position: "bottom",
+      });
+      return;
+    }
+
+    if (!isValidEmailDomain(email)) {
+      // ToastAndroid.show("Please use a valid email domain", ToastAndroid.SHORT);
+      setInvalidDomain(true);
+
+      return;
+    }
+
+    if (!hasSpecialCharacter(password)) {
+      if (password === "") {
+      }
+      // ToastAndroid.show(
+      //   "Password must contain a special character",
+      //   ToastAndroid.SHORT
+      // );
+      setPasswordCharacter(true);
+
       return;
     }
 
@@ -70,10 +127,14 @@ export default function SignupPage() {
       const usersArray = users ? JSON.parse(users) : [];
 
       // Check if email is already registered
-      const userExists = usersArray.some(user => user.email === email);
+      const userExists = usersArray.some((user) => user.email === email);
       if (userExists) {
-        ToastAndroid.show('User already registered with this email', ToastAndroid.SHORT);
-        setLoading(false);
+        setLoading(false); // Hide loader
+        ToastAndroid.show(
+          "User already registered with this email",
+          ToastAndroid.SHORT
+        );
+        setUserRegistered(true)
         return;
       }
 
@@ -92,12 +153,23 @@ export default function SignupPage() {
 
       // Show success message
 
-      ToastAndroid.show('User registered successfully', ToastAndroid.SHORT);
+      // ToastAndroid.show('User registered successfully', ToastAndroid.SHORT)
+      Toast.show({
+        text1: "User registered successfully",
+        duration: 2000,
+      });
+
+
+      setUserRegistered(true); // Set userRegistered state to true to disable signup button
+
+      // Navigate to the main app stack after signup
+      navigation.navigate("MainAppStack");
 
       // Reset fields after successful signup
-      setFullname('');
-      setEmail('');
-      setPassword('');
+      setFullname("");
+      setEmail("");
+      
+      setPassword("");
 
       // Navigate to the main app stack after signup
       navigation.navigate("MainAppStack");
@@ -131,7 +203,49 @@ export default function SignupPage() {
       navigation.navigate("Login");
     }, 500); // Simulating 2 seconds delay
   }
+  const nameChangerhandler = (text) => {
+    setFullname(text);
+    setFullNameRequired(false);
+    if (text.length >= 0) {
+      setFullNameRequired(false);
+    }
+  };
 
+  const emailChangeHandler = (text) => {
+    setEmail(text);
+    setEmailRequired(false);
+    if (!isValidEmailDomain(text)) {
+      // ToastAndroid.show("Please use a valid email domain", ToastAndroid.SHORT);
+      setInvalidDomain(false);
+      setUserRegistered(false)
+
+      return;
+    }
+    if (email === "") {
+      setEmailRequired(false);
+      setUserRegistered(false)
+    }
+  };
+
+  const passwordChangeHandler = (text) => {
+    setPassword(text);
+    setPasswordRequired(false);
+    // setPasswordLength(true);
+    passwordLength;
+    if (text.length > 6) {
+      setPasswordRequired(false);
+    }
+    if (!hasSpecialCharacter(text)) {
+      setPasswordCharacter(false);
+
+      return;
+      
+    }
+    if (password === "") {
+      setEmailRequired(false);
+      setPasswordCharacter(false);
+    }
+  };
   const renderPage = () => {
     switch (currentPage) {
       case "Home":
@@ -168,6 +282,7 @@ export default function SignupPage() {
                   style={hideScrollbar}
                   keyboardShouldPersistTaps="handled"
                 >
+                  <Toast />
                   {/* Loader */}
                   {loading && (
                     <View style={styles.loaderContainer}>
@@ -189,9 +304,14 @@ export default function SignupPage() {
                           style={styles.input}
                           placeholder="Enter your full name"
                           value={fullname}
-                          onChangeText={setFullname}
+                          onChangeText={nameChangerhandler}
                           keyboardType="default"
                         />
+                        {fullNameRequired && (
+                          <Text style={styles.errorText}>
+                            Fullname Required
+                          </Text>
+                        )}
                       </View>
                       <View style={styles.inputContainer}>
                         <Text style={styles.label}>Email</Text>
@@ -199,13 +319,21 @@ export default function SignupPage() {
                           style={styles.input}
                           placeholder="Enter your email"
                           value={email}
-                          onChangeText={setEmail}
+                          onChangeText={emailChangeHandler}
                           keyboardType="email-address"
                         />
                         {userRegistered && (
                           <Text style={styles.errorText}>
                             User already registered
                           </Text>
+                        )}
+                        {invalidDomain && (
+                          <Text style={styles.errorText}>
+                            Please use valid Email Address
+                          </Text>
+                        )}
+                        {emailRequired && (
+                          <Text style={styles.errorText}>Email Required</Text>
                         )}
                       </View>
 
@@ -216,7 +344,7 @@ export default function SignupPage() {
                             style={styles.input}
                             placeholder="Enter your password"
                             value={password}
-                            onChangeText={setPassword}
+                            onChangeText={passwordChangeHandler}
                             secureTextEntry={!isPasswordVisible}
                           />
                           <TouchableOpacity
@@ -229,6 +357,21 @@ export default function SignupPage() {
                               style={styles.icon}
                             />
                           </TouchableOpacity>
+                          {passwordLength && (
+                            <Text style={styles.errorText}>
+                              Password Length
+                            </Text>
+                          )}
+                          {passwordRequire && (
+                            <Text style={styles.errorText}>
+                              Password Required
+                            </Text>
+                          )}
+                          {passwordCharacter && (
+                            <Text style={styles.errorText}>
+                              Please use special character
+                            </Text>
+                          )}
                         </View>
                       </View>
                     </View>
@@ -287,6 +430,7 @@ export default function SignupPage() {
                       </TouchableOpacity>
                     </View>
                   </View>
+                  <Toast />
                 </ScrollView>
               </KeyboardAvoidingView>
             </SafeAreaView>

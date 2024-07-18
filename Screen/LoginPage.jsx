@@ -3,7 +3,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { IconButton } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
+import Icon from "react-native-vector-icons/MaterialIcons";
 import { useEffect } from "react";
+import Toast from "react-native-toast-message";
 import {
   StyleSheet,
   Text,
@@ -30,19 +32,34 @@ const { width } = Dimensions.get("window");
 const scale = (size) => (width / 375) * size;
 
 export default function LoginPage() {
-  const [currentPage, setCurrentPage] = useState("Login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fillError, setFillError] = useState(false);
   const [errorMsg, setErrorMsg] = useState(false);
   const [PswrdErrorMsg, setPswrdErrorMsg] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [validEmail, setValidEmail] = useState(false);
+  const [iconActive, setIconActive] = useState(null);
   console.log(errorMsg);
   const navigation = useNavigation();
 
   const validateEmail = (email) => {
-    const regex = "/^[^s@]+@[^s@]+.[^s@]+$/";
-    return regex.test(email);
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // List of allowed domains
+    const allowedDomains = [
+      "gmail.com",
+      "hotmail.com",
+      "rediffmail.com",
+      "yahoo.com",
+      "yahoo.co.in",
+      "myitronline.com",
+    ];
+
+    // Extract domain from email using regex
+    const domain = email.split("@")[1];
+
+    // Check if email matches the regex and domain is in allowed domains
+    return regex.test(email) && allowedDomains.includes(domain);
   };
 
   const toggleShowPassword = () => {
@@ -70,8 +87,13 @@ export default function LoginPage() {
   const handleLogin = async () => {
     try {
       if (email === "" || password === "") {
-        // setFillError(true);
-        ToastAndroid.show("Please fill in all fields", ToastAndroid.SHORT);
+        setFillError(true);
+        setValidEmail(false);
+        Toast.show({
+          type: "error",
+          text1: "Please fill in all field",
+          position: "bottom",
+        });
         return;
       }
 
@@ -93,6 +115,7 @@ export default function LoginPage() {
       // Check if user exists
       if (!user) {
         setErrorMsg(true);
+
         return;
       } else {
         setErrorMsg(false);
@@ -108,9 +131,12 @@ export default function LoginPage() {
 
       // Redirect to HomePage after login
       navigation.navigate("MainAppStack");
-      ToastAndroid.show("Login Successfully", ToastAndroid.SHORT);
+      // ToastAndroid.show("Login Successfully", ToastAndroid.SHORT);
+
       setEmail("");
       setPassword("");
+      setValidEmail(false);
+      setIconActive(false);
       setFillError(false);
       setErrorMsg(false);
       setPswrdErrorMsg(false);
@@ -122,16 +148,38 @@ export default function LoginPage() {
 
   const handleChangeInput = (text) => {
     setEmail(text);
-    if (text.length > 0) {
+    if (text.trim().length > 0) {
       setFillError(false); // Hide error when input is not empty
-      setErrorMsg(false)
-    }else {
+    } else {
       setFillError(true); // Show error if input is empty
-      setErrorMsg(true)
-    } if (text.length === "") {
-      setFillError(false); // Show error if input is empty
-      setErrorMsg(false)
     }
+    setErrorMsg(false); // Reset email error message when typing
+
+    // Check email format
+    if (!validateEmail(text)) {
+      // setErrorMsg(true); // Show error if email format is invalid
+      setValidEmail(true);
+      setIconActive(false);
+    } else {
+      // setErrorMsg(false); // Clear error when email format is valid
+      setIconActive(true);
+      setValidEmail(false);
+    }
+    if (text.length === 0) {
+      setFillError(false);
+    }
+  };
+
+  const passwordChangehandler = (text) => {
+    setPassword(text);
+    if (text.trim().length > 0) {
+      setFillError(false); // Hide error when input is not empty
+    } else {
+      setFillError(true); // Show error if input is empty
+    }
+    setPswrdErrorMsg(false); // Reset password error message when typing
+    setFillError(false);
+    
   };
   function SignupHandler() {
     navigation.navigate("Signup");
@@ -164,19 +212,37 @@ export default function LoginPage() {
             <View style={styles.inputBox}>
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>Email</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Enter your email"
-                  value={email}
-                  onChangeText={handleChangeInput}
-                  keyboardType="email-address"
-                />
-                {errorMsg && (
-                  <Text style={styles.errorText}>User Not Found</Text>
+                <View style={styles.emailContainer}>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Enter your email"
+                    value={email}
+                    onChangeText={handleChangeInput}
+                    keyboardType="email-address"
+                  />
+                  <View style={styles.iconContainer}>
+                    <IconButton
+                      icon={() => (
+                        <Icon
+                          name={iconActive ? "check-circle" : "close"}
+                          size={24}
+                          color={iconActive ? "green" : "red"}
+                        />
+                      )} // Adjust size and color as needed
+                    />
+                  </View>
+                </View>
+                {fillError && (
+                  <Text style={styles.errorText}>
+                    Please fill in your email
+                  </Text>
                 )}
-                {/* {fillError && (
-                  <Text style={styles.errorText}>Please fill email</Text>
-                )} */}
+                {errorMsg && (
+                  <Text style={styles.errorText}>User not found</Text>
+                )}
+                {validEmail && (
+                  <Text style={styles.errorText}>Please Enter Valid Email</Text>
+                )}
               </View>
 
               <View style={styles.inputContainer}>
@@ -186,7 +252,7 @@ export default function LoginPage() {
                     style={styles.input}
                     placeholder="Enter your password"
                     value={password}
-                    onChangeText={setPassword}
+                    onChangeText={passwordChangehandler}
                     secureTextEntry={!showPassword} // Toggle secureTextEntry based on showPassword state
                   />
                   <IconButton
@@ -199,9 +265,9 @@ export default function LoginPage() {
                   {PswrdErrorMsg && (
                     <Text style={styles.errorText}>Please Check Password</Text>
                   )}
-                  {/* {fillError && (
+                  {fillError && (
                     <Text style={styles.errorText}>Please fill password</Text>
-                  )} */}
+                  )}
                 </View>
               </View>
               <TouchableOpacity
@@ -247,6 +313,7 @@ export default function LoginPage() {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+      <Toast />
       <StatusBar style="auto" />
     </LinearGradient>
   );
@@ -258,6 +325,18 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     width: "100%",
+  },
+  emailContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    // borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
+    // padding: 10,
+  },
+  iconContainer: {
+    position: "absolute",
+    right: 10,
   },
   Fullcontainer: {
     // flex: 1,

@@ -8,11 +8,12 @@ const Home = () => {
   useEffect(() => {
     fetchProducts();
   }, []);
-
+// console.log(products);
   const fetchProducts = async () => {
     try {
       const response = await axios.get("https://fakestoreapi.com/products");
       setProducts(response.data);
+      
     } catch (error) {
       console.error("Error fetching products: ", error);
     }
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   card: {
-    flexDirection: "row",
+    flexDirection: "col",
     alignItems: "center",
     borderWidth: 1,
     borderColor: "#ccc",
@@ -69,8 +70,8 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   cardImage: {
-    width: 80,
-    height: 80,
+    width: 150,
+    height: 160,
     borderRadius: 8,
     marginRight: 10,
   },
@@ -80,6 +81,7 @@ const styles = StyleSheet.create({
   cardTitle: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "black",
     marginBottom: 5,
   },
   cardPrice: {
