@@ -156,6 +156,6 @@ export default function App() {
 
 const styles = StyleSheet.create({
   icon: {
-    marginLeft: 20, // Adjust the value to set the desired left margin
+    marginLeft: 20, // Adjust the value to set the desired left gin
   },
 });
